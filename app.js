@@ -11,15 +11,32 @@ const flash = require('express-flash')
 
 var app = express();
 
+app.use(express.urlencoded({ extended: false }));
+
+// setting session handle
+app.use(session({
+  secret: 'kode rahasia',
+  resave: false,
+  saveUninitialized: false
+}));
+
+// setting passport
+const passport = require('./lib/passport')
+app.use(passport.initialize())
+app.use(passport.session())
+
+// setting flash
+app.use(flash())
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -39,20 +56,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-// setting session handle
-app.use(session({
-  secret: 'kode rahasia',
-  resave: false,
-  saveUninitialized: false
-}));
-
-// setting passport
-const passport = require('./lib/passport')
-app.use(passport.initialize())
-app.use(passport.session())
-
-// setting flash
-app.use(flash())
 
 module.exports = app;

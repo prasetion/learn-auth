@@ -8,5 +8,10 @@ module.exports = {
                 res.redirect('/login')
             })
             .catch(err => next(err))
-    }
+    },
+    login: passport.authenticate('local', {
+        successRedirect:'/',
+        failureRedirect:'/login',
+        failureFlash:true
+    })
 }
