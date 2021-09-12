@@ -5,6 +5,7 @@ const {
 
 // import bcrypt
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -29,6 +30,17 @@ module.exports = (sequelize, DataTypes) => {
     // method check password
     checkPassword = password => bcrypt.compareSync(password, this.password)
 
+    generateToken = () => {
+      const payLoad = {
+        id:this.id,
+        username:this.username
+      }
+
+      const rahasia = 'ini rahasia'
+      const token = jwt.sign(payLoad,rahasia)
+      return token
+    } 
+
     // method auth
     static authenticate = async ({ username, password }) => {
       try {
@@ -46,6 +58,8 @@ module.exports = (sequelize, DataTypes) => {
         return Promise.reject(err)
       }
     }
+
+
   };
   User.init({
     username: DataTypes.STRING,
