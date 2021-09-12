@@ -6,6 +6,8 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const session = require('express-session');
+const flash = require('express-flash')
 
 var app = express();
 
@@ -37,5 +39,20 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// setting session handle
+app.use(session({
+  secret: 'kode rahasia',
+  resave: false,
+  saveUninitialized: false
+}));
+
+// setting passport
+const passport = require('./lib/passport')
+app.use(passport.initialize())
+app.use(passport.session())
+
+// setting flash
+app.use(flash())
 
 module.exports = app;
