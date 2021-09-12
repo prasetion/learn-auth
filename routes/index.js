@@ -6,4 +6,11 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+// controller
+const auth = require('../controllers/authController')
+
+// register page
+router.get('/register', (req,res) => res.render('register'))
+router.post('/register', auth.register)
+
 module.exports = router;
