@@ -10,8 +10,11 @@ module.exports = {
             .catch(err => next(err))
     },
     login: passport.authenticate('local', {
-        successRedirect:'/',
+        successRedirect:'/whoami',
         failureRedirect:'/login',
         failureFlash:true
-    })
+    }),
+    whoami: (req,res)=>{
+        res.render('profile', req.user.dataValues)
+    }
 }
